@@ -17,15 +17,8 @@
       In the middle: O(n) We need to find the target node and the previos by index (O(n)) then change the previous node's address to the one stored on the target node
 */
 
+import { EmptyListError, IllegalArgumentError } from "../shared/Errors";
 import Node from "./Node";
-
-const illegalArgumentError = () => {
-  return new Error("illegal argument");
-};
-
-const emptyListError = () => {
-  return new Error("empty list");
-};
 
 export class LinkedList {
   private first: Node | null;
@@ -63,7 +56,7 @@ export class LinkedList {
   }
 
   public removeFirst(): void {
-    if (this.isEmpty()) throw emptyListError();
+    if (this.isEmpty()) throw new EmptyListError();
 
     if (this.almostEmpty()) this.first = this.last = null;
     else {
@@ -76,7 +69,7 @@ export class LinkedList {
   }
 
   public removeLast(): void {
-    if (this.isEmpty()) throw emptyListError();
+    if (this.isEmpty()) throw new EmptyListError();
 
     if (this.almostEmpty()) this.first = this.last = null;
     else {
@@ -125,7 +118,7 @@ export class LinkedList {
   }
 
   public reverse(): void {
-    if (this.isEmpty()) throw emptyListError();
+    if (this.isEmpty()) throw new EmptyListError();
 
     let current = this.first.next;
     let prev = this.first;
@@ -144,14 +137,14 @@ export class LinkedList {
   }
 
   public getNodeFromEnd(k: number): number {
-    if (this.isEmpty()) throw emptyListError();
-    if (k < 0) throw illegalArgumentError();
+    if (this.isEmpty()) throw new EmptyListError();
+    if (k < 0) throw new IllegalArgumentError();
 
     let node = this.first;
     let sensor = this.first;
 
     for (let i = 0; i < k - 1; i++) {
-      if (sensor === null) throw illegalArgumentError();
+      if (sensor === null) throw new IllegalArgumentError();
 
       sensor = sensor.next;
     }
@@ -165,7 +158,7 @@ export class LinkedList {
   }
 
   public findMiddle(): number[] {
-    if (this.isEmpty()) throw emptyListError();
+    if (this.isEmpty()) throw new EmptyListError();
 
     let middle = this.first;
     let sensor = this.first;
@@ -180,7 +173,7 @@ export class LinkedList {
   }
 
   public hasLoop(): boolean {
-    if (this.isEmpty()) throw emptyListError();
+    if (this.isEmpty()) throw new EmptyListError();
 
     let sensor = this.first;
     let current = this.first;

@@ -1,17 +1,6 @@
+import { EmptyListError, IllegalArgumentError } from "../../shared/Errors";
 import Song from "./Song";
 import SongNode from "./SongNode";
-
-export class EmptyListError extends Error {
-  constructor() {
-    super("empty list");
-  }
-}
-
-export class IllegalArgumentError extends Error {
-  constructor() {
-    super("illegal argument");
-  }
-}
 
 class Playlist {
   private first: SongNode;
