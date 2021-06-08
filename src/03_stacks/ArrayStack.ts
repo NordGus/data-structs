@@ -1,14 +1,13 @@
-import Node from "../03_stacks/Node";
-
-class Stack {
-  private top: Node;
-  private count: number;
+class ArrayStack {
+  private stack: any[];
   private size = 10;
+  private count: number;
 
   constructor(size?: number) {
-    this.top = null;
-    this.count = 0;
     if (size) this.size = size;
+
+    this.stack = new Array<any>(this.size);
+    this.count = 0;
   }
 
   public empty(): boolean {
@@ -18,38 +17,28 @@ class Stack {
   public peek(): any {
     if (this.isEmpty()) throw new Error("illegal state");
 
-    return this.top.item;
+    return this.stack[this.count - 1];
   }
 
   public push(item: any): void {
     if (this.isFull()) throw new Error("stack overflow");
 
-    const node = new Node(item);
-
-    if (this.top) node.next = this.top;
-
-    this.top = node;
-    this.count++;
+    this.stack[this.count++] = item;
   }
 
   public pop(): any {
     if (this.isEmpty()) throw new Error("illegal state");
 
-    const poped = this.top;
-    this.top = this.top.next;
-    poped.next = null;
-
-    this.count--;
-    return poped.item;
+    return this.stack[--this.count];
   }
 
   private isEmpty(): boolean {
-    return !this.top;
+    return this.count === 0;
   }
 
   private isFull(): boolean {
-    return this.count === this.size;
+    return this.size === this.count;
   }
 }
 
-export default Stack;
+export default ArrayStack;

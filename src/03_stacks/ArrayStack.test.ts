@@ -1,13 +1,13 @@
-import Stack from "./Stack";
+import ArrayStack from "./ArrayStack";
 
-describe("Stack", () => {
-  let stack: Stack;
+describe("ArrayStack", () => {
+  let stack: ArrayStack;
   const data = [1, "2", 3.0, { echo: "catorce" }];
 
   const fillStack = (data: any[]) =>
     data.forEach((obj: any) => stack.push(obj));
 
-  beforeEach(() => (stack = new Stack(10)));
+  beforeEach(() => (stack = new ArrayStack(10)));
 
   describe("push an object", () => {
     it("to the top of the stack", () => {

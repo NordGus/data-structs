@@ -10,9 +10,19 @@ class StringReverser {
     let output = "";
 
     chars.forEach((char: string) => stack.push(char));
-    for (; stack.peek() !== null; ) output += stack.pop();
+    while (this.peekable(stack)) output += stack.pop();
 
     return output;
+  }
+
+  private peekable(stack: Stack): boolean {
+    try {
+      stack.peek();
+    } catch {
+      return false;
+    }
+
+    return true;
   }
 }
 
