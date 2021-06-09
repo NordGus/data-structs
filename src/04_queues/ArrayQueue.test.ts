@@ -159,9 +159,11 @@ describe("ArrayQueue", () => {
       fillQueue();
 
       queue.remove();
+      queue.remove();
       queue.add(99);
+      queue.add(42);
 
-      expect(queue.toArray()).toEqual([1, 2, 3, 4, 99]);
+      expect(queue.toArray()).toEqual([2, 3, 4, 99, 42]);
     });
   });
 });
