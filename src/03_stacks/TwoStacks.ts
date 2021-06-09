@@ -31,12 +31,10 @@ class Stack {
     if (!this.top) throw new Error("illegal state");
 
     const poped = this.top;
-
     this.top = this.top.next;
-
     poped.next = null;
-
     this.count--;
+
     return poped.value;
   }
 
@@ -49,7 +47,8 @@ class Stack {
   }
 
   private isFull(): boolean {
-    return this.maxSize ? this.count === this.maxSize : false;
+    if (this.maxSize) return this.count === this.maxSize;
+    return false;
   }
 }
 
@@ -84,7 +83,7 @@ class TwoStacks {
   public push1(val: number): void {
     if (this.isFull()) throw new Error("stack overflow");
 
-    this.head1.push(this.getIndex(1));
+    this.head1.push(this.getIndex1());
 
     this.memory[this.head1.peek()] = val;
   }
@@ -92,7 +91,7 @@ class TwoStacks {
   public push2(val: number): void {
     if (this.isFull()) throw new Error("stack overflow");
 
-    this.head2.push(this.getIndex(2));
+    this.head2.push(this.getIndex2());
 
     this.memory[this.head2.peek()] = val;
   }
@@ -122,11 +121,11 @@ class TwoStacks {
   }
 
   public isFull1(): boolean {
-    return this.freeSpace === 0;
+    return this.isFull();
   }
 
   public isFull2(): boolean {
-    return this.freeSpace === 0;
+    return this.isFull();
   }
 
   /*  Private Methods */
@@ -139,20 +138,34 @@ class TwoStacks {
     return this.size - this.head2.size - this.head1.size;
   }
 
-  private getIndex(stack: number): number {
-    if (![1, 2].includes(stack)) throw new Error("invalid stack");
+  private areBothStacksEmpty(): boolean {
+    return this.isEmpty1() && this.isEmpty2();
+  }
 
-    if (this.empty.size > 0) return this.empty.pop();
+  private unsedMemory(): boolean {
+    return this.empty.size > 0;
+  }
 
-    if (this.isEmpty1() && this.isEmpty2()) return 0;
-    else if (stack === 1 && this.isEmpty1()) return this.head2.peek() + 1;
-    else if (stack === 1 && this.isEmpty2()) return this.head1.peek() + 1;
-    else if (stack === 2 && this.isEmpty2()) return this.head1.peek() + 1;
-    else if (stack === 2 && this.isEmpty1()) return this.head2.peek() + 1;
+  private getIndex1(): number {
+    if (this.unsedMemory()) return this.empty.pop();
+    if (this.areBothStacksEmpty()) return 0;
 
-    return this.head1.peek() > this.head2.peek()
-      ? this.head1.peek() + 1
-      : this.head2.peek() + 1;
+    if (this.isEmpty1()) return this.head2.peek() + 1;
+    if (this.isEmpty2()) return this.head1.peek() + 1;
+    if (this.head1.peek() > this.head2.peek()) return this.head1.peek() + 1;
+
+    return this.head2.peek() + 1;
+  }
+
+  private getIndex2(): number {
+    if (this.unsedMemory()) return this.empty.pop();
+    if (this.areBothStacksEmpty()) return 0;
+
+    if (this.isEmpty2()) return this.head1.peek() + 1;
+    if (this.isEmpty1()) return this.head2.peek() + 1;
+    if (this.head1.peek() > this.head2.peek()) return this.head1.peek() + 1;
+
+    return this.head2.peek() + 1;
   }
 }
 
