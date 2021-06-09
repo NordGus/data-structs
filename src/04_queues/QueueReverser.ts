@@ -9,8 +9,8 @@ class QueueReverser {
   }
 
   reverse(queue: Queue): void {
-    while (!queue.isEmpty()) this.stack.push(queue.remove());
-    while (!this.stack.empty()) queue.add(this.stack.pop());
+    for (; !queue.isEmpty(); ) this.stack.push(queue.remove());
+    for (; !this.stack.empty(); ) queue.add(this.stack.pop());
   }
 }
 
