@@ -1,6 +1,6 @@
 interface Node {
   value: number;
-  next?: Node;
+  next?: Node | null;
 }
 
 class Queue {
@@ -89,7 +89,7 @@ class Queue {
   /* Private Methods */
 
   private push(val: number): void {
-    const node = { value: val };
+    const node: Node = { value: val, next: null };
 
     if (this.isEmpty()) this.tail = this.head = node;
     else {
@@ -102,7 +102,10 @@ class Queue {
 
   private pop(): number {
     let head = this.head;
-    this.head = this.head.next;
+
+    if (this.head === this.tail) this.head = this.tail = null;
+    else this.head = this.head.next;
+
     head.next = null;
     this.count--;
 
