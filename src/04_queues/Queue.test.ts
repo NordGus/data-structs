@@ -154,5 +154,16 @@ describe("Queue", () => {
         expect(queue.isFull()).toBeTruthy();
       });
     });
+
+    describe("toArray", () => {
+      it("returns an array of the contents of the queue", () => {
+        fillQueue();
+
+        queue.remove();
+        queue.add(99);
+
+        expect(queue.toArray()).toEqual([1, 2, 3, 4, 99]);
+      });
+    });
   });
 });
