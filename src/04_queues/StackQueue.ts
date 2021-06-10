@@ -110,9 +110,7 @@ class StackQueue {
   poll(): number {
     if (this.isEmpty()) return null;
 
-    const _ = this.transferToDequeue();
-    this.count--;
-    return this.dequeue.pop();
+    return this.pop();
   }
 
   isEmpty(): boolean {
@@ -123,6 +121,10 @@ class StackQueue {
     return this.count === this.size;
   }
 
+  get currentSize(): number {
+    return this.count;
+  }
+
   toArray(): number[] {
     if (this.isEmpty()) return [];
 
@@ -130,7 +132,7 @@ class StackQueue {
     let dump = new Stack(this.size);
 
     for (let i = 0; i < this.count; i++) {
-      const _ = this.transferToDequeue();
+      const _ = this.moveEnqueueToDequeue();
       let val = this.dequeue.pop();
 
       arr[i] = val;
@@ -138,7 +140,7 @@ class StackQueue {
       dump.push(val);
     }
 
-    for (let i = 0; i < this.count; i++) this.dequeue.push(dump.pop());
+    for (let i = 0; !dump.isEmpty(); i++) this.dequeue.push(dump.pop());
 
     return arr;
   }
@@ -151,17 +153,19 @@ class StackQueue {
   }
 
   private pop(): number {
-    const _ = this.transferToDequeue();
+    const _ = this.moveEnqueueToDequeue();
     this.count--;
+
     return this.dequeue.pop();
   }
 
   private glance(): number {
-    const _ = this.transferToDequeue();
+    const _ = this.moveEnqueueToDequeue();
+
     return this.dequeue.peek();
   }
 
-  private transferToDequeue(): boolean {
+  private moveEnqueueToDequeue(): boolean {
     if (this.dequeue.isEmpty())
       for (; !this.enqueue.isEmpty(); ) this.dequeue.push(this.enqueue.pop());
 
