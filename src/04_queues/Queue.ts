@@ -1,13 +1,13 @@
-interface Node {
-  value: number;
-  next?: Node | null;
+interface Node<T> {
+  value: T;
+  next?: Node<T>;
 }
 
-class Queue {
+class Queue<T> {
   private count: number;
   private size: number;
-  private head: Node;
-  private tail: Node;
+  private head: Node<T>;
+  private tail: Node<T>;
 
   constructor(size: number) {
     this.size = size;
@@ -16,7 +16,7 @@ class Queue {
     this.count = 0;
   }
 
-  add(val: number): boolean {
+  add(val: T): boolean {
     if (this.isFull()) throw new Error("illegal state");
 
     try {
@@ -28,7 +28,7 @@ class Queue {
     return true;
   }
 
-  offer(val: number): boolean {
+  offer(val: T): boolean {
     if (this.isFull()) return false;
 
     try {
@@ -40,25 +40,25 @@ class Queue {
     return true;
   }
 
-  element(): number {
+  element(): T {
     if (this.isEmpty()) throw new Error("illegal state");
 
     return this.front.value;
   }
 
-  peek(): number {
+  peek(): T {
     if (this.isEmpty()) return null;
 
     return this.front.value;
   }
 
-  remove(): number {
+  remove(): T {
     if (this.isEmpty()) throw new Error("illegal state");
 
     return this.pop();
   }
 
-  poll(): number {
+  poll(): T {
     if (this.isEmpty()) return null;
 
     return this.pop();
@@ -72,7 +72,11 @@ class Queue {
     return this.count === this.size;
   }
 
-  toArray(): number[] {
+  get capacity(): number {
+    return this.size;
+  }
+
+  toArray(): T[] {
     if (this.isEmpty()) return [];
 
     let arr = new Array(this.count);
@@ -88,8 +92,8 @@ class Queue {
 
   /* Private Methods */
 
-  private push(val: number): void {
-    const node: Node = { value: val, next: null };
+  private push(val: T): void {
+    const node: Node<T> = { value: val, next: null };
 
     if (this.isEmpty()) this.tail = this.head = node;
     else {
@@ -100,7 +104,7 @@ class Queue {
     this.count++;
   }
 
-  private pop(): number {
+  private pop(): T {
     let head = this.head;
 
     if (this.head === this.tail) this.head = this.tail = null;
@@ -112,7 +116,7 @@ class Queue {
     return head.value;
   }
 
-  private get front(): Node {
+  private get front(): Node<T> {
     return this.head;
   }
 }

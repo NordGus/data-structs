@@ -2,13 +2,13 @@ import Queue from "./Queue";
 
 describe("Queue", () => {
   describe("are FIFO data structures", () => {
-    let queue: Queue;
+    let queue: Queue<number>;
     let size = 5;
     let values: number[];
 
     const illegalStateError = "illegal state";
 
-    const initQueue = () => (queue = new Queue(size));
+    const initQueue = () => (queue = new Queue<number>(size));
 
     const fillQueue = () => values.forEach((item: number) => queue.offer(item));
 
