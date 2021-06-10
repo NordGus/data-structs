@@ -1,71 +1,19 @@
-interface Node {
-  value: number;
-  next?: Node;
-}
+import Stack from "../shared/SimpleStack";
 
-class Stack {
-  private top: Node;
-  private count: number;
-  private maxSize: number;
-
-  constructor(size?: number) {
-    this.top = null;
-    this.count = 0;
-    this.maxSize = size;
-  }
-
-  peek(): number {
-    if (!this.top) throw new Error("illegal state");
-
-    return this.top.value;
-  }
-
-  push(val: number): void {
-    if (this.isFull()) throw new Error("stack overflow");
-
-    this.top = { value: val, next: this.top };
-    this.count++;
-  }
-
-  pop(): number {
-    if (!this.top) throw new Error("illegal state");
-
-    const poped = this.top;
-    this.top = this.top.next;
-    poped.next = null;
-    this.count--;
-
-    return poped.value;
-  }
-
-  isEmpty(): boolean {
-    return !this.top;
-  }
-
-  get size(): number {
-    return this.count;
-  }
-
-  private isFull(): boolean {
-    if (this.maxSize) return this.count === this.maxSize;
-    return false;
-  }
-}
-
-class StackQueue {
+class StackQueue<T> {
   private count: number;
   private size: number;
-  private enqueue: Stack;
-  private dequeue: Stack;
+  private enqueue: Stack<T>;
+  private dequeue: Stack<T>;
 
   constructor(size: number) {
     this.size = size;
     this.count = 0;
-    this.enqueue = new Stack(size);
-    this.dequeue = new Stack(size);
+    this.enqueue = new Stack<T>(size);
+    this.dequeue = new Stack<T>(size);
   }
 
-  add(val: number): boolean {
+  add(val: T): boolean {
     if (this.isFull()) throw new Error("illegal state");
 
     try {
@@ -77,7 +25,7 @@ class StackQueue {
     return true;
   }
 
-  offer(val: number): boolean {
+  offer(val: T): boolean {
     if (this.isFull()) return false;
 
     try {
@@ -89,25 +37,25 @@ class StackQueue {
     return true;
   }
 
-  element(): number {
+  element(): T {
     if (this.isEmpty()) throw new Error("illegal state");
 
     return this.glance();
   }
 
-  peek(): number {
+  peek(): T {
     if (this.isEmpty()) return null;
 
     return this.glance();
   }
 
-  remove(): number {
+  remove(): T {
     if (this.isEmpty()) throw new Error("illegal state");
 
     return this.pop();
   }
 
-  poll(): number {
+  poll(): T {
     if (this.isEmpty()) return null;
 
     return this.pop();
@@ -117,19 +65,15 @@ class StackQueue {
     return this.enqueue.isEmpty() && this.dequeue.isEmpty();
   }
 
-  isFull() {
+  isFull(): boolean {
     return this.count === this.size;
   }
 
-  get currentSize(): number {
-    return this.count;
-  }
-
-  toArray(): number[] {
+  toArray(): T[] {
     if (this.isEmpty()) return [];
 
-    let arr = new Array(this.count);
-    let dump = new Stack(this.size);
+    let arr = new Array<T>(this.count);
+    let dump = new Stack<T>(this.size);
 
     for (let i = 0; i < this.count; i++) {
       const _ = this.moveEnqueueToDequeue();
@@ -147,19 +91,19 @@ class StackQueue {
 
   /* Private Methods */
 
-  private push(val: number): void {
+  private push(val: T): void {
     this.enqueue.push(val);
     this.count++;
   }
 
-  private pop(): number {
+  private pop(): T {
     const _ = this.moveEnqueueToDequeue();
     this.count--;
 
     return this.dequeue.pop();
   }
 
-  private glance(): number {
+  private glance(): T {
     const _ = this.moveEnqueueToDequeue();
 
     return this.dequeue.peek();

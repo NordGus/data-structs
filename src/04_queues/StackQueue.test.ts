@@ -2,13 +2,13 @@ import StackQueue from "./StackQueue";
 
 describe("StackQueue", () => {
   describe("are FIFO data structures", () => {
-    let queue: StackQueue;
+    let queue: StackQueue<number>;
     let size = 5;
     let values: number[];
 
     const illegalStateError = "illegal state";
 
-    const initQueue = () => (queue = new StackQueue(size));
+    const initQueue = () => (queue = new StackQueue<number>(size));
 
     const fillQueue = () => values.forEach((item: number) => queue.offer(item));
 
