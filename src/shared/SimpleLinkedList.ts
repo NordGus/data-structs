@@ -14,7 +14,7 @@ class LinkedList<T> {
   }
 
   addFirst(item: T): void {
-    const node: Node<T> = { value: item };
+    const node: Node<T> = { value: item, next: null };
 
     if (this.isEmpty()) this.last = node;
     else node.next = this.first;
@@ -24,10 +24,10 @@ class LinkedList<T> {
   }
 
   addLast(item: T): void {
-    const node: Node<T> = { value: item };
+    const node: Node<T> = { value: item, next: null };
 
     if (this.isEmpty()) this.first = node;
-    else node.next = this.last.next;
+    else this.last.next = node;
 
     this.last = node;
     this.count++;
@@ -74,6 +74,20 @@ class LinkedList<T> {
     }
 
     return false;
+  }
+
+  toArray(): T[] {
+    if (this.isEmpty()) return [];
+
+    let arr = new Array(this.count);
+    let current = this.first;
+
+    for (let i = 0; current; i++) {
+      arr[i] = current.value;
+      current = current.next;
+    }
+
+    return arr;
   }
 
   get start(): T {
