@@ -1,4 +1,3 @@
-import LinkedList from "../shared/SimpleLinkedList";
 import BinarySearchTree from "./BinarySearchTree";
 
 describe("BinarySearchTree", () => {
