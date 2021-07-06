@@ -3,7 +3,7 @@ import LinkedList from "../shared/SimpleLinkedList";
 interface AVLNode<V> {
   value: V;
   left?: AVLNode<V>;
-  rigth?: AVLNode<V>;
+  right?: AVLNode<V>;
   height: number;
 }
 
@@ -28,7 +28,7 @@ class AVLTree {
     if (!root) return AVLNode<number>(value);
 
     if (root.value > value) root.left = this._insert(root.left, value);
-    else root.rigth = this._insert(root.rigth, value);
+    else root.right = this._insert(root.right, value);
 
     root.height = this._calculateNodeHeight(root);
 
@@ -40,7 +40,7 @@ class AVLTree {
   }
 
   private _calculateNodeHeight(node: AVLNode<number>): number {
-    return Math.max(this._height(node.left), this._height(node.rigth)) + 1;
+    return Math.max(this._height(node.left), this._height(node.right)) + 1;
   }
 
   private _balance(root: AVLNode<number>): AVLNode<number> {
@@ -48,10 +48,10 @@ class AVLTree {
       if (this._balanceFactor(root.left) > 0)
         root.left = this._leftRotate(root.left);
 
-      return this._rigthRotate(root);
-    } else if (this._isRigthHeavy(root)) {
-      if (this._balanceFactor(root.rigth) > 0)
-        root.rigth = this._rigthRotate(root.rigth);
+      return this._rightRotate(root);
+    } else if (this._isRightHeavy(root)) {
+      if (this._balanceFactor(root.right) > 0)
+        root.right = this._rightRotate(root.right);
 
       return this._leftRotate(root);
     }
@@ -60,21 +60,21 @@ class AVLTree {
   }
 
   private _balanceFactor(node: AVLNode<number>): number {
-    return !node ? 0 : this._height(node.left) - this._height(node.rigth);
+    return !node ? 0 : this._height(node.left) - this._height(node.right);
   }
 
   private _isLeftHeavy(node: AVLNode<number>): boolean {
     return this._balanceFactor(node) > 1;
   }
 
-  private _isRigthHeavy(node: AVLNode<number>): boolean {
+  private _isRightHeavy(node: AVLNode<number>): boolean {
     return this._balanceFactor(node) < -1;
   }
 
   private _leftRotate(root: AVLNode<number>): AVLNode<number> {
-    const newRoot = root.rigth;
+    const newRoot = root.right;
 
-    root.rigth = newRoot.left;
+    root.right = newRoot.left;
     newRoot.left = root;
 
     newRoot.height = this._calculateNodeHeight(newRoot);
@@ -83,11 +83,11 @@ class AVLTree {
     return newRoot;
   }
 
-  private _rigthRotate(root: AVLNode<number>): AVLNode<number> {
+  private _rightRotate(root: AVLNode<number>): AVLNode<number> {
     const newRoot = root.left;
 
-    root.left = newRoot.rigth;
-    newRoot.rigth = root;
+    root.left = newRoot.right;
+    newRoot.right = root;
 
     newRoot.height = this._calculateNodeHeight(newRoot);
     root.height = this._calculateNodeHeight(newRoot);
@@ -112,7 +112,7 @@ class AVLTree {
 
     this._traverseInOrder(root.left, list);
     list.addLast(root.value);
-    this._traverseInOrder(root.rigth, list);
+    this._traverseInOrder(root.right, list);
   }
 
   /* toList */
@@ -134,7 +134,7 @@ class AVLTree {
   private _size(root: AVLNode<number>): number {
     if (!root) return 0;
 
-    return this._size(root.left) + this._size(root.rigth) + 1;
+    return this._size(root.left) + this._size(root.right) + 1;
   }
 
   /* size */
@@ -151,7 +151,7 @@ class AVLTree {
     return (
       Math.abs(this._balanceFactor(root)) <= 1 &&
       this._isBalanced(root.left) &&
-      this._isBalanced(root.rigth)
+      this._isBalanced(root.right)
     );
   }
 

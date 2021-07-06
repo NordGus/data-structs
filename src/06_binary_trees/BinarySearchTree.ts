@@ -9,7 +9,7 @@ import LinkedList from "../shared/SimpleLinkedList";
 interface Node<V> {
   value: V;
   left?: Node<V>;
-  rigth?: Node<V>;
+  right?: Node<V>;
 }
 
 class BinarySearchTree {
@@ -33,15 +33,15 @@ class BinarySearchTree {
       if (parent.value > node.value && !!parent.left) {
         parent = parent.left;
         continue;
-      } else if (parent.value < node.value && !!parent.rigth) {
-        parent = parent.rigth;
+      } else if (parent.value < node.value && !!parent.right) {
+        parent = parent.right;
         continue;
       }
 
       if (parent.value > node.value) {
         parent.left = node;
       } else if (parent.value < node.value) {
-        parent.rigth = node;
+        parent.right = node;
       }
 
       break;
@@ -51,7 +51,7 @@ class BinarySearchTree {
   find(value: number): boolean {
     for (let current = this._root; !!current; ) {
       if (current.value > value) current = current.left;
-      else if (current.value < value) current = current.rigth;
+      else if (current.value < value) current = current.right;
       else return true;
     }
 
@@ -104,7 +104,7 @@ class BinarySearchTree {
 
     for (; current; ) {
       last = current;
-      current = current.rigth;
+      current = current.right;
     }
 
     return last.value;
@@ -179,9 +179,9 @@ class BinarySearchTree {
       this._getAncestors(root.left, value, list);
     }
 
-    if (this._contains(root.rigth, value)) {
+    if (this._contains(root.right, value)) {
       list.addFirst(root.value);
-      this._getAncestors(root.rigth, value, list);
+      this._getAncestors(root.right, value, list);
     }
   }
 
@@ -191,7 +191,7 @@ class BinarySearchTree {
     list.addLast(root.value);
 
     this.traversePreOrder(root.left, list);
-    this.traversePreOrder(root.rigth, list);
+    this.traversePreOrder(root.right, list);
   }
 
   private traverseInOrder(root: Node<number>, list: LinkedList<number>) {
@@ -199,14 +199,14 @@ class BinarySearchTree {
 
     this.traverseInOrder(root.left, list);
     list.addLast(root.value);
-    this.traverseInOrder(root.rigth, list);
+    this.traverseInOrder(root.right, list);
   }
 
   private traversePostOrder(root: Node<number>, list: LinkedList<number>) {
     if (!root) return;
 
     this.traversePostOrder(root.left, list);
-    this.traversePostOrder(root.rigth, list);
+    this.traversePostOrder(root.right, list);
     list.addLast(root.value);
   }
 
@@ -218,16 +218,16 @@ class BinarySearchTree {
 
   private _size(root: Node<number>): number {
     if (!root) return 0;
-    if (!root.left && !root.rigth) return 1;
+    if (!root.left && !root.right) return 1;
 
-    return 1 + this._size(root.left) + this._size(root.rigth);
+    return 1 + this._size(root.left) + this._size(root.right);
   }
 
   private _height(root: Node<number>): number {
     if (!root) return -1;
-    if (!root.left && !root.rigth) return 0;
+    if (!root.left && !root.right) return 0;
 
-    return 1 + Math.max(this._height(root.left), this._height(root.rigth));
+    return 1 + Math.max(this._height(root.left), this._height(root.right));
   }
 
   private _equals(first: Node<number>, second: Node<number>): boolean {
@@ -237,7 +237,7 @@ class BinarySearchTree {
       return (
         first.value === second.value &&
         this._equals(first.left, second.left) &&
-        this._equals(first.rigth, second.rigth)
+        this._equals(first.right, second.right)
       );
 
     return false;
@@ -253,7 +253,7 @@ class BinarySearchTree {
 
     return (
       this._isBinarySearchTree(root.left, min, root.value) &&
-      this._isBinarySearchTree(root.rigth, root.value, max)
+      this._isBinarySearchTree(root.right, root.value, max)
     );
   }
 
@@ -272,40 +272,40 @@ class BinarySearchTree {
     depth--;
 
     this._nodesAtDepth(depth, root.left, list);
-    this._nodesAtDepth(depth, root.rigth, list);
+    this._nodesAtDepth(depth, root.right, list);
   }
 
   private _invert(root: Node<number>): void {
     if (!root) return;
 
     const left = root.left;
-    const rigth = root.rigth;
+    const right = root.right;
 
-    root.left = rigth;
-    root.rigth = left;
+    root.left = right;
+    root.right = left;
 
     this._invert(left);
-    this._invert(rigth);
+    this._invert(right);
   }
 
   private _max(root: Node<number>): number {
     if (!root) return -Infinity;
-    if (!root.left && !root.rigth) return root.value;
+    if (!root.left && !root.right) return root.value;
 
-    return Math.max(root.value, this._max(root.left), this._max(root.rigth));
+    return Math.max(root.value, this._max(root.left), this._max(root.right));
   }
 
   private _min(root: Node<number>): number {
     if (!root) return Infinity;
-    if (!root.left && !root.rigth) return root.value;
+    if (!root.left && !root.right) return root.value;
 
-    return Math.min(root.value, this._min(root.left), this._min(root.rigth));
+    return Math.min(root.value, this._min(root.left), this._min(root.right));
   }
 
   private _contains(root: Node<number>, value: number): boolean {
     if (!root) return false;
     if (root.value > value) return this._contains(root.left, value);
-    if (root.value < value) return this._contains(root.rigth, value);
+    if (root.value < value) return this._contains(root.right, value);
 
     return true;
   }
@@ -316,15 +316,15 @@ class BinarySearchTree {
     second: number
   ): boolean {
     if (!root) return false;
-    if (!root.left && !root.rigth) return false;
-    if (root?.left?.value === first && root?.rigth?.value === second)
+    if (!root.left && !root.right) return false;
+    if (root?.left?.value === first && root?.right?.value === second)
       return true;
-    if (root?.left?.value === second && root?.rigth?.value === first)
+    if (root?.left?.value === second && root?.right?.value === first)
       return true;
 
     return (
       this._areSibling(root.left, first, second) ||
-      this._areSibling(root.rigth, first, second)
+      this._areSibling(root.right, first, second)
     );
   }
 }
