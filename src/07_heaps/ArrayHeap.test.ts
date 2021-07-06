@@ -1,4 +1,4 @@
-import { MaxHeap } from "./ArrayHeap";
+import { MaxHeap, MinHeap } from "./ArrayHeap";
 
 describe("ArrayHeap", () => {
   describe("MaxHeap", () => {
@@ -100,6 +100,116 @@ describe("ArrayHeap", () => {
           numbers[i] = heap.remove();
 
         expect(numbers).toEqual(expected);
+      });
+    });
+  });
+
+  describe("MinHeap", () => {
+    let heap: MinHeap;
+
+    const fillHeap = (heap: MinHeap) => {
+      const values = [
+        { key: 15, value: "test" },
+        { key: 10, value: "test" },
+        { key: 3, value: "test" },
+        { key: 8, value: "test" },
+        { key: 12, value: "test" },
+        { key: 9, value: "test" },
+        { key: 4, value: "test" },
+        { key: 1, value: "test" },
+        { key: 24, value: "test" },
+      ];
+
+      for (const val of values) heap.insert(val);
+    };
+
+    beforeEach(() => (heap = new MinHeap()));
+
+    describe("size", () => {
+      test("returns 0 when empty", () => {
+        expect(heap.size).toBe(0);
+      });
+
+      test("returns the amount of elements in the heap", () => {
+        heap.insert({ key: 1, value: "" });
+
+        expect(heap.size).toBe(1);
+
+        heap.insert({ key: 2, value: "" });
+
+        expect(heap.size).toBe(2);
+      });
+    });
+
+    describe("insert", () => {
+      test("insert a value", () => {
+        heap.insert({ key: 42, value: "" });
+
+        expect(heap.toArray()).toEqual([{ key: 42, value: "" }]);
+      });
+
+      test("inserts and bubble up values", () => {
+        const expected = [
+          { key: 1, value: "test" },
+          { key: 3, value: "test" },
+          { key: 4, value: "test" },
+          { key: 8, value: "test" },
+          { key: 12, value: "test" },
+          { key: 10, value: "test" },
+          { key: 9, value: "test" },
+          { key: 15, value: "test" },
+          { key: 24, value: "test" },
+        ];
+
+        fillHeap(heap);
+
+        expect(heap.toArray()).toEqual(expected);
+      });
+
+      test("throws an erro when is full", () => {
+        let error: string;
+
+        try {
+          fillHeap(heap);
+          fillHeap(heap);
+        } catch (e) {
+          error = e.message;
+        }
+
+        expect(error).toBe("illegal state");
+      });
+    });
+
+    describe("remove", () => {
+      test("removes the root value", () => {
+        const expected = [
+          { key: 3, value: "test" },
+          { key: 8, value: "test" },
+          { key: 4, value: "test" },
+          { key: 15, value: "test" },
+          { key: 12, value: "test" },
+          { key: 10, value: "test" },
+          { key: 9, value: "test" },
+          { key: 24, value: "test" },
+        ];
+
+        fillHeap(heap);
+
+        expect(heap.remove()).toEqual({ key: 1, value: "test" });
+
+        expect(heap.toArray()).toEqual(expected);
+      });
+
+      test("throws an error when is empty", () => {
+        let error: string;
+
+        try {
+          heap.remove();
+        } catch (e) {
+          error = e.message;
+        }
+
+        expect(error).toBe("illegal state");
       });
     });
   });

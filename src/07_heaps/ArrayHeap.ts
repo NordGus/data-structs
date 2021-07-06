@@ -126,3 +126,135 @@ export class MaxHeap {
     this._items[second] = temp;
   }
 }
+
+interface Node<K, V> {
+  key: K;
+  value: V;
+}
+
+export class MinHeap {
+  private _items: Array<Node<number, string>>;
+  private _size: number;
+
+  constructor(size?: number) {
+    this._items = new Array<Node<number, string>>(size || 15);
+    this._size = 0;
+  }
+
+  get size(): number {
+    return this._size;
+  }
+
+  isFull(): boolean {
+    return this._size === this._items.length;
+  }
+
+  isEmpty(): boolean {
+    return this._size === 0;
+  }
+
+  toArray(): number[] {
+    const arr = new Array(this._size);
+
+    for (let i = 0; i < this._size; i++) arr[i] = this._items[i];
+
+    return arr;
+  }
+
+  insert(node: Node<number, string>): void {
+    if (this.isFull()) throw new Error("illegal state");
+
+    this._items[this._size++] = node;
+
+    this._bubbleUp(this._size - 1);
+  }
+
+  private _bubbleUp(index: number): void {
+    let current = index;
+
+    while (
+      current > 0 &&
+      this._items[current].key < this._items[this._parent(current)].key
+    ) {
+      this._swapItems(current, this._parent(current));
+      current = this._parent(current);
+    }
+  }
+
+  remove(): Node<number, string> {
+    if (this.isEmpty()) throw new Error("illegal state");
+
+    const root = this._items[0];
+
+    this._items[0] = this._items[--this._size];
+
+    this._bubbleDown(0);
+
+    return root;
+  }
+
+  private _bubbleDown(index: number): void {
+    let current = index;
+
+    while (this._validIndex(current) && !this._isValidParent(current)) {
+      const child = this._smallerChild(current);
+      this._swapItems(current, child);
+      current = child;
+    }
+  }
+
+  private _isValidParent(parent: number): boolean {
+    if (!this._hasLeftChild(parent)) return true;
+
+    let valid =
+      this._items[parent].key <= this._items[this._leftChild(parent)].key;
+
+    if (this._hasRightChild(parent))
+      valid =
+        valid &&
+        this._items[parent].key <= this._items[this._rightChild(parent)].key;
+
+    return valid;
+  }
+
+  private _smallerChild(parent: number): number {
+    if (!this._hasLeftChild(parent)) return parent;
+    if (!this._hasRightChild(parent)) return this._leftChild(parent);
+
+    const left = this._leftChild(parent);
+    const right = this._rightChild(parent);
+
+    if (this._items[left].key < this._items[right].key) return left;
+    else return right;
+  }
+
+  private _validIndex(index: number): boolean {
+    return index <= this._size;
+  }
+
+  private _hasLeftChild(index: number): boolean {
+    return this._validIndex(this._leftChild(index));
+  }
+
+  private _hasRightChild(index: number): boolean {
+    return this._validIndex(this._rightChild(index));
+  }
+
+  private _leftChild(parent: number): number {
+    return parent * 2 + 1;
+  }
+
+  private _rightChild(parent: number): number {
+    return parent * 2 + 2;
+  }
+
+  private _parent(child: number): number {
+    return Math.floor((child - 1) / 2);
+  }
+
+  private _swapItems(first: number, second: number): void {
+    const temp = this._items[first];
+    this._items[first] = this._items[second];
+    this._items[second] = temp;
+  }
+}
