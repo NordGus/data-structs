@@ -33,14 +33,16 @@ class Trie {
   contains(word: string): boolean {
     if (!word) return false;
 
-    let current = this._root;
+    return this._contains(this._root, word, 0);
+  }
 
-    for (const char of word) {
-      if (!current.hasChild(char)) return false;
-      current = current.getChild(char);
-    }
-
-    return current.end;
+  private _contains(root: Node, word: string, index: number): boolean {
+    if (index === word.length) return root.end;
+    
+    const child = root.getChild(word[index])
+    if (!child) return false
+    
+    return this._contains(child, word, index + 1)
   }
 
   toOrderedArray(): string[] {
