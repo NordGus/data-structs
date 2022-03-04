@@ -8,7 +8,7 @@ import { Node } from "./Node"
 // remove O(L)
 
 class Trie {
-  private _root: Node;
+  protected _root: Node;
 
   constructor() {
     this._root = new Node("");

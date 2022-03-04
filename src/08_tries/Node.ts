@@ -48,4 +48,8 @@ export class Node {
     get isEmpty(): boolean {
         return this._children.size === 0
     }
+
+    get childrenCount(): number {
+        return this._children.size
+    }
 }
