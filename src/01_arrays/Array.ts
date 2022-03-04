@@ -118,8 +118,6 @@ class CustomArray {
       } else if (i < index && !newItems[i]) newItems[i] = 0;
     }
 
-    console.log(newItems);
-
     this.items = newItems;
     this.next = this.next > index ? this.next + 1 : index + 1;
   }

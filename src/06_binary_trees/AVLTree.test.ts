@@ -31,7 +31,7 @@ describe("AVLTree", () => {
       const root = {
         value: 10,
         height: 1,
-        rigth: {
+        right: {
           value: 20,
           height: 0,
         },
@@ -50,7 +50,7 @@ describe("AVLTree", () => {
       const root = {
         value: 20,
         height: 1,
-        rigth: {
+        right: {
           value: 30,
           height: 0,
         },
@@ -69,10 +69,10 @@ describe("AVLTree", () => {
       const root = {
         value: 10,
         height: 2,
-        rigth: {
+        right: {
           value: 20,
           height: 1,
-          rigth: {
+          right: {
             value: 30,
             height: 0,
           },
@@ -90,7 +90,7 @@ describe("AVLTree", () => {
       const root = {
         value: 20,
         height: 1,
-        rigth: {
+        right: {
           value: 30,
           height: 0,
         },
@@ -110,10 +110,10 @@ describe("AVLTree", () => {
       const root = {
         value: 10,
         height: 2,
-        rigth: {
+        right: {
           value: 20,
           height: 1,
-          rigth: {
+          right: {
             value: 30,
             height: 0,
           },
