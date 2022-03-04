@@ -67,47 +67,72 @@ describe("Trie", () => {
     beforeEach(() => {
       trie.insert("can");
       trie.insert("canada");
+      trie.insert("dog")
     });
 
     test("substring", () => {
       expect(trie.remove("can")).toBe("can");
-      expect(trie.toOrderedArray()).toEqual(["c", "a", "n", "a", "d", "a"]);
       expect(trie.contains("can")).toBeFalsy();
       expect(trie.contains("canada")).toBeTruthy();
+      expect(trie.contains("dog")).toBeTruthy();
     });
 
     test("string", () => {
       expect(trie.remove("canada")).toBe("canada");
-      expect(trie.toOrderedArray()).toEqual(["c", "a", "n"]);
       expect(trie.contains("can")).toBeTruthy();
+      expect(trie.contains("dog")).toBeTruthy();
     });
 
     test("illegal arguments", () => {
-      let error: string;
+      const args = ["", null, undefined]
 
-      try {
-        trie.remove("");
-      } catch (e) {
-        error = e.message;
+      for (const arg of args) {
+        try {
+          trie.remove(arg);
+        } catch (e) {
+          expect(e.message).toBe("illegal argument");
+        }  
       }
+    });
+  });
 
-      expect(error).toBe("illegal argument");
+  describe("findWords", () => {
+    beforeEach(() => {
+      trie.insert("car");
+      trie.insert("card");
+      trie.insert("careful");
+      trie.insert("egg");
+    });
 
-      try {
-        trie.remove(null);
-      } catch (e) {
-        error = e.message;
-      }
+    test("returns a list of suggestions for the given prefix", () => {
+      expect(trie.findWords("car")).toEqual(["car", "card", "careful"]);
+      expect(trie.findWords("e")).toEqual(["egg"]);
+      expect(trie.findWords("test")).toEqual([]);
+      expect(trie.findWords("")).toEqual(["car", "card", "careful", "egg"]);
+      expect(trie.findWords(null)).toEqual([]);
+      expect(trie.findWords(undefined)).toEqual([]);
+    });
+  });
 
-      expect(error).toBe("illegal argument");
+  describe("contents", () => {
+    beforeEach(() => {
+      trie.insert("car");
+      trie.insert("card");
+      trie.insert("careful");
+      trie.insert("egg");
+    });
 
-      try {
-        trie.remove(undefined);
-      } catch (e) {
-        error = e.message;
-      }
+    test("returns a list of the words cotained on the trie", () => {
+      expect(trie.contents()).toEqual(["car", "card", "careful", "egg"]);
+    });
 
-      expect(error).toBe("illegal argument");
+    test("returns an empty list when trie is empty", () => {
+      trie.remove("car");
+      trie.remove("card");
+      trie.remove("careful");
+      trie.remove("egg");
+
+      expect(trie.contents()).toEqual([]);
     });
   });
 });

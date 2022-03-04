@@ -1,64 +1,17 @@
 // Cabify question
 
 import LinkedList from "../shared/SimpleLinkedList";
+import { Node } from "./Node"
 
 // lookup O(L) L = lenght of the word
 // insert O(L)
 // remove O(L)
 
-class Node {
-  private _value: string;
-  private _children: Map<string, Node>;
-  private _end: boolean;
-
-  constructor(value: string) {
-    this._value = value;
-    this._children = new Map<string, Node>();
-    this._end = false;
-  }
-
-  get end(): boolean {
-    return this._end;
-  }
-
-  set end(v: boolean) {
-    this._end = v;
-  }
-
-  getChild(v: string): Node {
-    return this._children.get(v);
-  }
-
-  addChild(v: string): void {
-    this._children.set(v, new Node(v));
-  }
-
-  hasChild(v: string): boolean {
-    return this._children.has(v);
-  }
-
-  getChildren(): Node[] {
-    return Array.from(this._children.values());
-  }
-
-  hasChildren(): boolean {
-    return this._children.size > 0;
-  }
-
-  removeChild(v: string): boolean {
-    return this._children.delete(v);
-  }
-
-  get value(): string {
-    return this._value;
-  }
-}
-
 class Trie {
   private _root: Node;
 
   constructor() {
-    this._root = new Node(" ");
+    this._root = new Node("");
   }
 
   insert(word: string): boolean {
@@ -79,7 +32,6 @@ class Trie {
 
   contains(word: string): boolean {
     if (!word) return false;
-    if (typeof word !== "string") return false;
 
     let current = this._root;
 
@@ -123,7 +75,6 @@ class Trie {
 
   remove(word: string): string {
     if (!word) throw new Error("illegal argument");
-    if (typeof word !== "string") throw new Error("illegal argument");
 
     this._remove(this._root, word, 0);
 
@@ -143,6 +94,45 @@ class Trie {
     this._remove(child, word, index + 1);
 
     if (!child.hasChildren() && !child.end) root.removeChild(char);
+  }
+
+  findWords(prefix: string): string[] {
+    const prefixNode = this._findLastNodeOf(prefix)
+    const list = new LinkedList<string>()
+    
+    this._findWords(prefixNode, prefix, list)
+    
+    return list.toArray()
+  }
+
+  private _findLastNodeOf(prefix: string): Node {
+    if (prefix === null || prefix === undefined) return null;
+
+    let current = this._root;
+
+    for (const char of prefix) {
+      if (!current.hasChild(char)) return null;
+      current = current.getChild(char);
+    }
+
+    return current;
+  }
+
+  private _findWords(root: Node, word: string, words: LinkedList<string>): void {
+    if (root === null) return;
+    if (root.end) words.addLast(word)
+    
+    for (const child of root.getChildren()) {
+      this._findWords(child, word + child.value, words)
+    }
+  }
+
+  contents(): string[] {
+    const list = new LinkedList<string>()
+
+    this._findWords(this._root, "", list)
+
+    return list.toArray()
   }
 }
 
