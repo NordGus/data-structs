@@ -30,6 +30,7 @@ class Trie {
     return true;
   }
 
+  // recursive implementation looks more clear
   contains(word: string): boolean {
     if (!word) return false;
 
@@ -110,14 +111,16 @@ class Trie {
   private _findLastNodeOf(prefix: string): Node {
     if (prefix === null || prefix === undefined) return null;
 
-    let current = this._root;
+    return this.__findLastNodeOf(this._root, prefix, 0);
+  }
 
-    for (const char of prefix) {
-      if (!current.hasChild(char)) return null;
-      current = current.getChild(char);
-    }
+  private __findLastNodeOf(root: Node, word: string, index: number): Node {
+    if (index === word.length) return root;
 
-    return current;
+    const child = root.getChild(word[index])
+    if (!child) return null
+
+    return this.__findLastNodeOf(child, word, index + 1)
   }
 
   private _findWords(root: Node, word: string, words: LinkedList<string>): void {
