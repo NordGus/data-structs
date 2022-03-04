@@ -44,4 +44,8 @@ export class Node {
     get value(): string {
         return this._value;
     }
+
+    get isEmpty(): boolean {
+        return this._children.size === 0
+    }
 }

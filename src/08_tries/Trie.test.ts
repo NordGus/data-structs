@@ -135,4 +135,20 @@ describe("Trie", () => {
       expect(trie.contents()).toEqual([]);
     });
   });
+
+  describe("count", () => {
+    test("returns 0 when empty", () => {
+      expect(trie.count).toBe(0)
+    });
+
+    test("returns word count", () => {
+      trie.insert("car");
+      trie.insert("card");
+      trie.insert("care");
+      trie.insert("careful");
+      trie.insert("egg");
+
+      expect(trie.count).toBe(5)
+    });
+  })
 });

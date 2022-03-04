@@ -139,6 +139,20 @@ class Trie {
 
     return list.toArray()
   }
+
+  get count(): number {
+    return this._count(this._root, 0)
+  }
+
+  private _count(root: Node, accumulator: number): number {
+    let count = root.end ? accumulator + 1 : accumulator
+    
+    for (const child of root.getChildren()) {
+      count = this._count(child, count)
+    }
+
+    return count
+  }
 }
 
 export default Trie;
