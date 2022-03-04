@@ -145,13 +145,13 @@ class Trie {
   }
 
   private _count(root: Node, accumulator: number): number {
-    let count = root.end ? accumulator + 1 : accumulator
+    if (root.end) accumulator += 1
     
     for (const child of root.getChildren()) {
-      count = this._count(child, count)
+      accumulator = this._count(child, accumulator)
     }
 
-    return count
+    return accumulator
   }
 }
 
