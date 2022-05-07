@@ -4,12 +4,9 @@ describe("LinkedList", () => {
   let ll: LinkedList;
   const testData = [1, 2, 3, 4, 5, 6];
 
-  const fillLinkedList = () =>
-    testData.forEach((item: number) => ll.addLast(item));
+  const fillLinkedList = () => testData.forEach((item: number) => ll.addLast(item));
 
-  beforeEach(() => {
-    ll = new LinkedList();
-  });
+  beforeEach(() => ll = new LinkedList());
 
   it("is created empty", () => {
     expect(ll.size()).toBe(0);
