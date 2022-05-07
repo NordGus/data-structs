@@ -4,16 +4,16 @@ interface Node<T> {
 }
 
 class LinkedList<T> {
-  private first: Node<T>;
-  private last: Node<T>;
-  private count: number;
+  protected first: Node<T>;
+  protected last: Node<T>;
+  protected count: number;
 
   constructor() {
     this.first = this.last = null;
     this.count = 0;
   }
 
-  addFirst(item: T): void {
+  public addFirst(item: T): void {
     const node: Node<T> = { value: item, next: null };
 
     if (this.isEmpty()) this.last = node;
@@ -23,7 +23,7 @@ class LinkedList<T> {
     this.count++;
   }
 
-  addLast(item: T): void {
+  public addLast(item: T): void {
     const node: Node<T> = { value: item, next: null };
 
     if (this.isEmpty()) this.first = node;
@@ -33,7 +33,7 @@ class LinkedList<T> {
     this.count++;
   }
 
-  removeFirst(): T {
+  public removeFirst(): T {
     if (this.isEmpty()) throw new Error("empty list");
 
     let val = this.first.value;
@@ -49,7 +49,7 @@ class LinkedList<T> {
     return val;
   }
 
-  removeLast(): T {
+  public removeLast(): T {
     if (this.isEmpty()) throw new Error("empty list");
 
     let val = this.last.value;
@@ -64,7 +64,7 @@ class LinkedList<T> {
     return val;
   }
 
-  contains(item: T): boolean {
+  public contains(item: T): boolean {
     let current = this.first;
 
     for (; current; ) {
@@ -76,7 +76,7 @@ class LinkedList<T> {
     return false;
   }
 
-  toArray(): T[] {
+  public toArray(): T[] {
     if (this.isEmpty()) return [];
 
     let arr = new Array(this.count);
@@ -90,19 +90,19 @@ class LinkedList<T> {
     return arr;
   }
 
-  get start(): T {
+  public get start(): T {
     if (this.isEmpty()) throw new Error("empty list");
 
     return this.first.value;
   }
 
-  get end(): T {
+  public get end(): T {
     if (this.isEmpty()) throw new Error("empty list");
 
     return this.last.value;
   }
 
-  get size(): number {
+  public get size(): number {
     return this.count;
   }
 
@@ -126,7 +126,7 @@ class LinkedList<T> {
     return !this.first;
   }
 
-  private getPrevious(node: Node<T>): Node<T> {
+  protected getPrevious(node: Node<T>): Node<T> {
     let current = this.first;
 
     for (; current; ) {
