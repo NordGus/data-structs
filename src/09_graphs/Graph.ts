@@ -14,7 +14,47 @@ class Node {
 }
 
 class AdjacencyList extends LinkedList<Node> {
-    public add(node: Node): void { this.addLast(node) }
+  public add(node: Node): void { if (!this.contains(node)) this.addLast(node) }
+
+  public remove(node: Node): Node {
+    if (this.isEmpty()) return null;
+
+    let current = this.first;
+    let previous = null;
+
+    for (; current;) {
+      if (current.value === node || !current.next) break;
+      previous = current;
+      current = current.next;
+    }
+
+    // protection against Node not being in list
+    if (current.value !== node) return null;
+
+    this.count--;
+
+    if (this.first === this.last) {
+      this.first = this.last = null;
+      return current.value
+    }
+
+    if (current === this.first) {
+      this.first = current.next
+      current.next = null;
+      return current.value;  
+    }
+
+    if (current === this.last) {
+      this.last = previous;
+      this.last.next = null
+      return current.value;
+    }
+    
+    previous.next = current.next
+    current.next = null
+
+    return current.value;
+  }
 }
 
 class Graph {
@@ -32,8 +72,17 @@ class Graph {
     if (!this.adjacencyList.has(node)) this.adjacencyList.set(node, new AdjacencyList());
   }
   
-  public removeNode(label: string): string {
-    return ""
+  public removeNode(label: string): void {
+    const node = this.nodes.get(label);
+    if (!node) return;
+
+    for (const [n, targets] of this.adjacencyList) {
+      if (n === node) continue;
+      targets.remove(node);
+    }
+
+    this.adjacencyList.delete(node);
+    this.nodes.delete(node.toString());
   }
 
   public addEdge(from: string, to: string): void {
