@@ -107,6 +107,63 @@ describe("Graph", () => {
     });
   });
 
+  describe("#removeEdge", () => {
+    const [A, B, C, D] = ["A", "B", "C", "D"];
+
+    beforeEach(() => { 
+      for (const label of [A, B]) graph.addNode(label);
+      graph.addEdge(A, B);
+    });
+
+    describe("when edge doesn't exist between the given nodes", () => {
+      it("shouldn't change adjacency list when from doesn't exist", () => {
+        graph.removeEdge(C, A);
+
+        expect(graph.edgesArray(A)).toEqual([B]);
+      });
+
+      it("shouldn't change adjacency list when to doesn't exist", () => {
+        graph.removeEdge(A, C);
+
+        expect(graph.edgesArray(A)).toEqual([B]);
+      });
+    });
+
+    describe("when edge exist between the given nodes", () => {
+      it("should empty the adjacency list when there's only one edge", () => {
+        graph.removeEdge(A, B);
+
+        expect(graph.edgesArray(A)).toEqual([]);
+      });
+
+      it("should remove the first element from the adjacency list", () => {
+        graph.addNode(C);
+        graph.addEdge(A, C);
+        graph.removeEdge(A, B);
+
+        expect(graph.edgesArray(A)).toEqual([C]);
+      });
+
+      it("should remove the last element from the adjacency list", () => {
+        graph.addNode(C);
+        graph.addEdge(A, C);
+        graph.removeEdge(A, C);
+
+        expect(graph.edgesArray(A)).toEqual([B]);
+      });
+
+      it("should remove the matching node in the middle from the adjacency list", () => {
+        for (const label of [C, D]) {
+          graph.addNode(label);
+          graph.addEdge(A, label);  
+        }
+        graph.removeEdge(A, C);
+
+        expect(graph.edgesArray(A)).toEqual([B, D]);
+      });
+    });
+  });
+
   describe("#toArray, debugging method", () => {
     it("should return an array of strings", () => {
       const [A, B, C] = ["A", "B", "C"];

@@ -94,8 +94,13 @@ class Graph {
     this.adjacencyList.get(fromNode).add(toNode);
   }
   
-  public removeEdge(from: string, to: string): boolean {
-    return false;
+  public removeEdge(from: string, to: string): void {
+    const fromNode = this.nodes.get(from)
+    const toNode = this.nodes.get(to)
+    
+    if (!fromNode || !toNode) return;
+
+    this.adjacencyList.get(fromNode).remove(toNode);
   }
   
   public toArray(): string[] {
