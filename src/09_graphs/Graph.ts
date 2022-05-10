@@ -1,61 +1,8 @@
 import { IllegalArgumentError } from "../shared/Errors";
-import LinkedList from "../shared/SimpleLinkedList";
-
-class Node {
-  private label: string;
-
-  constructor(label: string) {
-    this.label = label;
-  }
-
-  public toString(): string {
-    return this.label;
-  }
-}
-
-class AdjacencyList extends LinkedList<Node> {
-  public add(node: Node): void { if (!this.contains(node)) this.addLast(node) }
-
-  public remove(node: Node): Node {
-    if (this.isEmpty()) return null;
-
-    let current = this.first;
-    let previous = null;
-
-    for (; current;) {
-      if (current.value === node || !current.next) break;
-      previous = current;
-      current = current.next;
-    }
-
-    // protection against Node not being in list
-    if (current.value !== node) return null;
-
-    this.count--;
-
-    if (this.first === this.last) {
-      this.first = this.last = null;
-      return current.value
-    }
-
-    if (current === this.first) {
-      this.first = current.next
-      current.next = null;
-      return current.value;  
-    }
-
-    if (current === this.last) {
-      this.last = previous;
-      this.last.next = null
-      return current.value;
-    }
-    
-    previous.next = current.next
-    current.next = null
-
-    return current.value;
-  }
-}
+import Queue from "../shared/SimpleQueue";
+import Stack from "../shared/SimpleStack";
+import AdjacencyList from "./AdjacencyList";
+import Node from "./Node";
 
 class Graph {
   protected nodes: Map<string, Node>;
@@ -101,6 +48,69 @@ class Graph {
     if (!fromNode || !toNode) return;
 
     this.adjacencyList.get(fromNode).remove(toNode);
+  }
+
+  public traverseDeepFirstRecursive(from: string): string[] {
+    const fromNode = this.nodes.get(from);
+    if (!fromNode) return [];
+
+    const output = new Set<Node>(); 
+
+    this._traverseDeepFirstRecursive(fromNode, output);
+    
+    return Array.from(output.values()).map((node) => node.toString());
+  }
+
+  private _traverseDeepFirstRecursive(from: Node, set: Set<Node>): void {
+    if (!from) return;
+    
+    set.add(from);
+    const neighbors = this.adjacencyList.get(from).toArray();
+
+    for (const neighbor of neighbors)
+      this._traverseDeepFirstRecursive(neighbor, set);
+  }
+
+  public traverseDeepFirstIterative(from: string): string[] {
+    const fromNode = this.nodes.get(from);
+    if (!fromNode) return [];
+    
+    const output = new Set<Node>(); 
+    const stack = new Stack<Node>();
+    stack.push(fromNode)
+
+    for (; !stack.isEmpty();) {
+      const current = stack.pop();
+      if (output.has(current)) continue;
+      
+      output.add(current);
+      
+      for (const neighbor of this.adjacencyList.get(current).toArray()) 
+        if (!output.has(neighbor)) stack.push(neighbor);
+    } 
+    
+    return Array.from(output.values()).map((node) => node.toString());
+  }
+
+  public traverseBreathFirst(from: string): string[] {
+    const fromNode = this.nodes.get(from);
+    if (!fromNode) return [];
+    
+    const output = new Set<Node>(); 
+    const queue = new Queue<Node>();
+    queue.enqueue(fromNode)
+
+    for (; !queue.isEmpty();) {
+      const current = queue.dequeue();
+      if (output.has(current)) continue;
+      
+      output.add(current);
+      
+      for (const neighbor of this.adjacencyList.get(current).toArray()) 
+        if (!output.has(neighbor)) queue.enqueue(neighbor);
+    } 
+    
+    return Array.from(output.values()).map((node) => node.toString());
   }
   
   public toArray(): string[] {

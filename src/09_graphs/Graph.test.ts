@@ -164,6 +164,67 @@ describe("Graph", () => {
     });
   });
 
+  describe("Implement Deep-First Graph Traversal", () => {
+    const [A, B, C, D] = ["A", "B", "C", "D"];
+
+    beforeEach(() => { 
+      for (const label of [A, B, C, D]) graph.addNode(label);
+      for (const edge of [B, C]) graph.addEdge(A, edge);
+      for (const edge of [D]) graph.addEdge(B, edge);
+      for (const edge of [C]) graph.addEdge(D, edge);
+    });
+
+    describe("#traverseDeepFirstRecursive", () => {
+      it("should traverse the graph deep-first and return the output", () => {
+        expect(graph.traverseDeepFirstRecursive(A)).toEqual([A, B, D, C]);
+        expect(graph.traverseDeepFirstRecursive(B)).toEqual([B, D, C]);
+        expect(graph.traverseDeepFirstRecursive(C)).toEqual([C]);
+        expect(graph.traverseDeepFirstRecursive(D)).toEqual([D, C]);
+      });
+
+      it("should return an empty array when given an invalid node label", () => {
+        expect(graph.traverseDeepFirstRecursive("G")).toEqual([]);
+      });
+    });
+
+    describe("#traverseDeepFirstIterative", () => {
+      it("should traverse the graph deep-first and return the output", () => {
+        expect(graph.traverseDeepFirstIterative(A)).toEqual([A, C, B, D]);
+        expect(graph.traverseDeepFirstIterative(B)).toEqual([B, D, C]);
+        expect(graph.traverseDeepFirstIterative(C)).toEqual([C]);
+        expect(graph.traverseDeepFirstIterative(D)).toEqual([D, C]);
+      });
+
+      it("should return an empty array when given an invalid node label", () => {
+        expect(graph.traverseDeepFirstIterative("G")).toEqual([]);
+      });
+    });
+  });
+
+  describe("Implement Breath-First Graph Traversal", () => {
+    const [A, B, C, D] = ["A", "B", "C", "D"];
+
+    beforeEach(() => { 
+      for (const label of [A, B, C, D]) graph.addNode(label);
+      for (const edge of [B, C]) graph.addEdge(A, edge);
+      for (const edge of [D]) graph.addEdge(B, edge);
+      for (const edge of [C]) graph.addEdge(D, edge);
+    });
+
+    describe("#traverseBreathFirst", () => {
+      it("should traverse the graph deep-first and return the output", () => {
+        expect(graph.traverseBreathFirst(A)).toEqual([A, B, C, D]);
+        expect(graph.traverseBreathFirst(B)).toEqual([B, D, C]);
+        expect(graph.traverseBreathFirst(C)).toEqual([C]);
+        expect(graph.traverseBreathFirst(D)).toEqual([D, C]);
+      });
+
+      it("should return an empty array when given an invalid node label", () => {
+        expect(graph.traverseBreathFirst("G")).toEqual([]);
+      });
+    });
+  });
+
   describe("#toArray, debugging method", () => {
     it("should return an array of strings", () => {
       const [A, B, C] = ["A", "B", "C"];
