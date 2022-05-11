@@ -225,45 +225,48 @@ describe("Graph", () => {
     });
   });
 
-  describe("#toArray, debugging method", () => {
-    it("should return an array of strings", () => {
-      const [A, B, C] = ["A", "B", "C"];
-
-      for (const label of [A, B, C]) graph.addNode(label);
-      for (const to of [B, C]) graph.addEdge(A, to);
-      for (const to of [A]) graph.addEdge(B, to);
-
-      expect(graph.toArray()).toEqual([
-        "A is connected with [B, C]",
-        "B is connected with [A]"
-      ]);
+  describe("Debugging methods", () => {
+    describe("#toArray", () => {
+      it("should return an array of strings", () => {
+        const [A, B, C] = ["A", "B", "C"];
+  
+        for (const label of [A, B, C]) graph.addNode(label);
+        for (const to of [B, C]) graph.addEdge(A, to);
+        for (const to of [A]) graph.addEdge(B, to);
+  
+        expect(graph.toArray()).toEqual([
+          "A is connected with [B, C]",
+          "B is connected with [A]"
+        ]);
+      });
+    });
+  
+    describe("#nodesArray", () => {
+      it("should return an array of nodes' labels", () => {
+        const labels = ["A", "B", "C"];
+  
+        for (const label of labels) graph.addNode(label);
+  
+        expect(graph.nodesArray()).toEqual(labels);
+      });
+    });
+  
+    describe("#edgesArray", () => {
+      it("should return given label's array of edges's labels for the given label", () => {
+        const [A, B, C] = ["A", "B", "C"];
+  
+        for (const label of [A, B, C]) graph.addNode(label);
+        for (const to of [B, C]) graph.addEdge(A, to);
+  
+        expect(graph.edgesArray(A)).toEqual([B, C]);
+      });
+  
+      it("should throw an illegal argument error when invalid label is given", () => {
+        const A = "A";
+  
+        expect(() => { graph.edgesArray(A) }).toThrow("illegal argument");
+      });
     });
   });
 
-  describe("#nodesArray, debugging method", () => {
-    it("should return an array of nodes' labels", () => {
-      const labels = ["A", "B", "C"];
-
-      for (const label of labels) graph.addNode(label);
-
-      expect(graph.nodesArray()).toEqual(labels);
-    });
-  });
-
-  describe("#edgesArray, debugging method", () => {
-    it("should return given label's array of edges's labels for the given label", () => {
-      const [A, B, C] = ["A", "B", "C"];
-
-      for (const label of [A, B, C]) graph.addNode(label);
-      for (const to of [B, C]) graph.addEdge(A, to);
-
-      expect(graph.edgesArray(A)).toEqual([B, C]);
-    });
-
-    it("should throw an illegal argument error when invalid label is given", () => {
-      const A = "A";
-
-      expect(() => { graph.edgesArray(A) }).toThrow("illegal argument");
-    });
-  });
 });
