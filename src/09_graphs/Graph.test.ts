@@ -169,9 +169,9 @@ describe("Graph", () => {
 
     beforeEach(() => { 
       for (const label of [A, B, C, D]) graph.addNode(label);
-      for (const edge of [B, C]) graph.addEdge(A, edge);
-      for (const edge of [D]) graph.addEdge(B, edge);
-      for (const edge of [C]) graph.addEdge(D, edge);
+      for (const to of [B, C]) graph.addEdge(A, to);
+      for (const to of [D]) graph.addEdge(B, to);
+      for (const to of [C]) graph.addEdge(D, to);
     });
 
     describe("#traverseDeepFirstRecursive", () => {
@@ -206,9 +206,9 @@ describe("Graph", () => {
 
     beforeEach(() => { 
       for (const label of [A, B, C, D]) graph.addNode(label);
-      for (const edge of [B, C]) graph.addEdge(A, edge);
-      for (const edge of [D]) graph.addEdge(B, edge);
-      for (const edge of [C]) graph.addEdge(D, edge);
+      for (const to of [B, C]) graph.addEdge(A, to);
+      for (const to of [D]) graph.addEdge(B, to);
+      for (const to of [C]) graph.addEdge(D, to);
     });
 
     describe("#traverseBreathFirst", () => {
