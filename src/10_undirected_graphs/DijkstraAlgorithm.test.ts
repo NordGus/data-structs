@@ -22,15 +22,15 @@ describe("Implement Dijkstra's Algorithm on a weighted graph", () => {
 
   describe("#shortestDistance", () => {
     describe("when from node doesn't exist", () => {
-      it("should return -1", () => expect(graph.shortestDistance("F", A)).toBe(-1));
+      it("should return -1", () => expect(() => graph.shortestDistance("F", A)).toThrow("illegal argument"));
     });
 
     describe("when to node doesn't exist", () => {
-      it("should return -1", () => expect(graph.shortestDistance(A, "F")).toBe(-1));
+      it("should return -1", () => expect(() => graph.shortestDistance(A, "F")).toThrow("illegal argument"));
     });
 
     describe("when both node doesn't exist", () => {
-      it("should return -1", () => expect(graph.shortestDistance("F", "G")).toBe(-1));
+      it("should return -1", () => expect(() => graph.shortestDistance("F", "G")).toThrow("illegal argument"));
     });
 
     describe("when boths nodes exists", () => {
@@ -43,19 +43,19 @@ describe("Implement Dijkstra's Algorithm on a weighted graph", () => {
   describe("#shortestPath", () => {
     describe("when from node doesn't exist", () => {
       it("should return an empty list", () => {
-        expect(graph.shortestPath("F", A)).toBeNull();
+        expect(() => graph.shortestPath("F", A)).toThrow("illegal argument");
       });
     });
 
     describe("when to node doesn't exist", () => {
       it("should return an empty list", () => {
-        expect(graph.shortestPath(A, "F")).toBeNull();
+        expect(() => graph.shortestPath(A, "F")).toThrow("illegal argument");
       });
     });
 
     describe("when both node doesn't exist", () => {
       it("should return an empty list", () => {
-        expect(graph.shortestPath("F", "G")).toBeNull();
+        expect(() => graph.shortestPath("F", "G")).toThrow("illegal argument");
       });
     });
 

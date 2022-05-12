@@ -190,7 +190,7 @@ class WeightedGraph {
     const fromNode = this.nodes.get(from);
     const toNode = this.nodes.get(to);
 
-    if (!fromNode || !toNode) return -1;
+    if (!fromNode || !toNode) throw new IllegalArgumentError;
 
     const visited = new Set<Node>();
     const distances = new Map<Node, number>();
@@ -223,7 +223,7 @@ class WeightedGraph {
     const fromNode = this.nodes.get(from);
     const toNode = this.nodes.get(to);
 
-    if (!fromNode || !toNode) return null;
+    if (!fromNode || !toNode) throw new IllegalArgumentError;
 
     const visited = new Set<Node>();
     const previosNodes = new Map<Node, Node>();
