@@ -1,5 +1,7 @@
 import { IllegalArgumentError } from "../shared/Errors";
 
+type Comparator<T> = (a: T, b: T) => boolean;
+
 class Node {
   private label: string;
   private edges: Map<Node, Edge>;
@@ -70,6 +72,75 @@ class Edge {
   }
 
   public clear(): void { this.from = this.to = null }
+
+  public getTo(): Node { return this.to; }
+  
+  public getWeight(): number { return this.weight; }
+}
+
+interface QueueNode {
+  node: Node;
+  priority: number;
+  next?: QueueNode;
+}
+
+class PriorityQueue {
+  protected comparator: Comparator<number>;
+  protected first: QueueNode;
+  protected size: number
+
+  constructor(comparator: Comparator<number>) {
+    this.comparator = comparator;
+    this.size = 0;
+    this.first = null;
+  }
+
+  enqueue(node: Node, priority: number): void {
+    const element: QueueNode = { node: node, priority: priority, next: null };
+    
+    if (this.first === null) {
+      this.first = element;
+      this.size++;
+      return; 
+    }
+
+    let prev = null;
+    let current = this.first;
+
+    for (; current;) {
+      if (this.comparator(element.priority, current.priority)) {
+        if (!!prev) prev.next = element;
+        element.next = current;
+        if (this.first === element.next) this.first = element;
+        this.size++;
+        return;
+      }
+
+      prev = current;
+      current = current.next;
+    }
+
+    console.log(current);
+    
+    prev.next = element;
+    this.size++;
+  }
+
+  dequeue(): Node {
+    if (this.isEmpty()) return null;
+
+    const element = this.first
+    
+    this.first = element.next
+
+    element.next = null;
+    this.size--;
+    return element.node
+  }
+
+  public isEmpty(): boolean {
+    return this.size === 0;
+  }
 }
 
 class WeightedGraph {
@@ -111,6 +182,39 @@ class WeightedGraph {
 
     fromNode.removeEdge(toNode);
     toNode.removeEdge(fromNode);
+  }
+
+  public shortestDistance(from: string, to: string): number {
+    const fromNode = this.nodes.get(from);
+    const toNode = this.nodes.get(to);
+
+    if (!fromNode || !toNode) return -1;
+
+    const visited = new Set<Node>();
+    const distances = new Map<Node, number>();
+    for (const node of this.nodes.values()) distances.set(node, Infinity);
+    distances.set(fromNode, 0);
+
+    const queue = new PriorityQueue((a: number, b: number) => a < b);
+    queue.enqueue(fromNode, 0);
+
+    for (; !queue.isEmpty();) {
+      const current = queue.dequeue();
+      visited.add(current);
+
+      for (const edge of current.edgesArray()) {
+        if (visited.has(edge.getTo())) continue;
+        
+        const newDistance = distances.get(current) + edge.getWeight();
+        
+        if (newDistance < distances.get(edge.getTo())) {
+          distances.set(edge.getTo(), newDistance);
+          queue.enqueue(edge.getTo(), newDistance);
+        }
+      }
+    }
+
+    return distances.get(toNode);
   }
 
   public nodesArray(): string[] { 
