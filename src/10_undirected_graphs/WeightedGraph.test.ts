@@ -246,6 +246,70 @@ describe("WeightedGraph", () => {
     });
   });
 
+  describe("Implement Prim's algorithm on a weighted graph", () => {
+    const [A, B, C, D] = ["A", "B", "C", "D"];
+
+    describe("#minSpanningTree", () => {
+      let tree: WeightedGraph;
+
+      describe("when graph has no nodes", () => {
+        beforeEach(() => tree = graph.minSpanningTree());
+
+        it("should return an empty minimum spanning tree", () => {
+          expect(tree).toEqual(new WeightedGraph());
+        });
+      });
+
+      describe("when graph has no edges", () => {
+        beforeEach(() => {
+          for (const label of [A, B, C, D]) graph.addNode(label);
+          tree = graph.minSpanningTree();
+        });
+
+        it("should return an empty minimum spanning tree", () => {
+          expect(tree).toEqual(new WeightedGraph());
+        });
+      });
+
+      describe("returned minimum spannig tree", () => {
+        beforeEach(() => { 
+          for (const label of [A, B, C, D]) graph.addNode(label);
+          graph.addEdge(A, B, 3);
+          graph.addEdge(A, C, 1);
+          graph.addEdge(B, C, 2);
+          graph.addEdge(B, D, 4);
+          graph.addEdge(C, D, 5);
+          tree = graph.minSpanningTree();
+        });
+
+        it("should containing the same nodes as weighted graph", () => {
+          expect(tree.nodesArray().sort()).toEqual(graph.nodesArray().sort());
+        });
+  
+        it("should have less edges as weighted graph", () => {
+          let treeEdgesCount = 0;
+          let graphEdgesCount = 0;
+
+          for (const label of [A, B, C, D]) {
+            treeEdgesCount += tree.edgesArray(label).length;
+            graphEdgesCount += graph.edgesArray(label).length;
+          }
+
+          expect(treeEdgesCount).toBeLessThan(graphEdgesCount);
+        });
+
+        it("should have N - 1 edges (N = amount of Nodes)", () => {
+          let treeEdgesCount = 0;
+
+          for (const label of [A, B, C, D]) treeEdgesCount += tree.edgesArray(label).length;
+
+          // expected value is multiplied by 2 because each each is stored twice on an undirected graph.
+          expect(treeEdgesCount).toBe((tree.nodesArray().length - 1) * 2);
+        });
+      });
+    }) 
+  });
+
   describe("Debugging methods", () => {
     describe("#nodesArray", () => {
       it("should return an array of nodes' labels", () => {

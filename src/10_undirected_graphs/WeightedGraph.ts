@@ -2,8 +2,6 @@ import { IllegalArgumentError } from "../shared/Errors";
 import LinkedList from "../shared/SimpleLinkedList";
 import Stack from "../shared/SimpleStack";
 
-type Comparator<T> = (a: T, b: T) => boolean;
-
 class Node {
   private label: string;
   private edges: Map<Node, Edge>;
@@ -75,6 +73,8 @@ class Edge {
 
   public clear(): void { this.from = this.to = null }
 
+  public getFrom(): Node { return this.from; }
+
   public getTo(): Node { return this.to; }
   
   public getWeight(): number { return this.weight; }
@@ -83,23 +83,29 @@ class Edge {
 interface QueueNode {
   node: Node;
   priority: number;
-  next?: QueueNode;
 }
 
-class PriorityQueue {
-  protected comparator: Comparator<number>;
-  protected first: QueueNode;
+type Comparator<T> = (a: T, b: T) => boolean;
+
+interface QueueEntry<T> {
+  item: T;
+  next?: QueueEntry<T>;
+}
+
+class PriorityQueue<T> {
+  protected comparator: Comparator<T>;
+  protected first: QueueEntry<T>;
   protected size: number
 
-  constructor(comparator: Comparator<number>) {
+  constructor(comparator: Comparator<T>) {
     this.comparator = comparator;
     this.size = 0;
     this.first = null;
   }
 
-  enqueue(node: Node, priority: number): void {
-    const element: QueueNode = { node: node, priority: priority, next: null };
-    
+  enqueue(item: T): void {
+    const element: QueueEntry<T> = { item: item, next: null };
+
     if (this.first === null) {
       this.first = element;
       this.size++;
@@ -110,7 +116,7 @@ class PriorityQueue {
     let current = this.first;
 
     for (; current;) {
-      if (this.comparator(element.priority, current.priority)) {
+      if (this.comparator(element.item, current.item)) {
         if (!!prev) prev.next = element;
         element.next = current;
         if (this.first === element.next) this.first = element;
@@ -122,22 +128,19 @@ class PriorityQueue {
       current = current.next;
     }
 
-    console.log(current);
-    
     prev.next = element;
     this.size++;
   }
 
-  dequeue(): Node {
+  dequeue(): T {
     if (this.isEmpty()) return null;
 
     const element = this.first
     
     this.first = element.next
-
     element.next = null;
     this.size--;
-    return element.node
+    return element.item;
   }
 
   public isEmpty(): boolean {
@@ -197,21 +200,21 @@ class WeightedGraph {
     for (const node of this.nodes.values()) distances.set(node, Infinity);
     distances.set(fromNode, 0);
 
-    const queue = new PriorityQueue((a: number, b: number) => a < b);
-    queue.enqueue(fromNode, 0);
+    const queue = new PriorityQueue<QueueNode>((a: QueueNode, b: QueueNode) => a.priority < b.priority);
+    queue.enqueue({ node: fromNode, priority: 0 });
 
     for (; !queue.isEmpty();) {
       const current = queue.dequeue();
-      visited.add(current);
+      visited.add(current.node);
 
-      for (const edge of current.getEdges()) {
+      for (const edge of current.node.getEdges()) {
         if (visited.has(edge.getTo())) continue;
         
-        const newDistance = distances.get(current) + edge.getWeight();
+        const newDistance = distances.get(current.node) + edge.getWeight();
         
         if (newDistance < distances.get(edge.getTo())) {
           distances.set(edge.getTo(), newDistance);
-          queue.enqueue(edge.getTo(), newDistance);
+          queue.enqueue({ node: edge.getTo(), priority: newDistance });
         }
       }
     }
@@ -231,22 +234,22 @@ class WeightedGraph {
     for (const node of this.nodes.values()) distances.set(node, Infinity);
     distances.set(fromNode, 0);
 
-    const queue = new PriorityQueue((a: number, b: number) => a < b);
-    queue.enqueue(fromNode, 0);
+    const queue = new PriorityQueue<QueueNode>((a: QueueNode, b: QueueNode) => a.priority < b.priority);
+    queue.enqueue({ node: fromNode, priority: 0 });
 
     for (; !queue.isEmpty();) {
       const current = queue.dequeue();
-      visited.add(current);
+      visited.add(current.node);
 
-      for (const edge of current.getEdges()) {
+      for (const edge of current.node.getEdges()) {
         if (visited.has(edge.getTo())) continue;
         
-        const newDistance = distances.get(current) + edge.getWeight();
+        const newDistance = distances.get(current.node) + edge.getWeight();
         
         if (newDistance < distances.get(edge.getTo())) {
           distances.set(edge.getTo(), newDistance);
-          previosNodes.set(edge.getTo(), current);
-          queue.enqueue(edge.getTo(), newDistance);
+          previosNodes.set(edge.getTo(), current.node);
+          queue.enqueue({ node: edge.getTo(), priority: newDistance });
         }
       }
     }
@@ -262,6 +265,39 @@ class WeightedGraph {
         return true;
 
     return false;
+  }
+
+  public minSpanningTree(): WeightedGraph {
+    const tree = new WeightedGraph();
+
+    if (this.nodes.size === 0) return tree;
+
+    const edges = new PriorityQueue<Edge>((a: Edge, b: Edge) => a.getWeight() < b.getWeight());
+    const startNode = Array.from(this.nodes.values())[0]
+
+    for (const edge of startNode.getEdges()) edges.enqueue(edge);
+    
+    if (edges.isEmpty()) return tree;
+    
+    tree.addNode(startNode.toString());
+    
+    
+
+    while (tree.nodes.size < this.nodes.size) {
+      const minEdge = edges.dequeue();
+      const nextNode = minEdge.getTo();
+      
+      if (tree.nodes.has(nextNode.toString())) continue;
+
+      tree.addNode(nextNode.toString());
+      tree.addEdge(minEdge.getFrom().toString(), nextNode.toString(), minEdge.getWeight());
+
+      for (const edge of nextNode.getEdges()) 
+        if (!tree.nodes.has(edge.getTo().toString()))
+          edges.enqueue(edge);
+    }
+
+    return tree;
   }
 
   public nodesArray(): string[] { 
