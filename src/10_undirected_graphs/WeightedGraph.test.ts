@@ -157,11 +157,9 @@ describe("WeightedGraph", () => {
   });
 
   describe("Implement Dijkstra's Algorithm on a weighted graph", () => {
-    let graph: WeightedGraph;
     const [A, B, C, D, E] = ["A", "B", "C", "D", "E"];
     
     beforeEach(() => {
-      graph = new WeightedGraph();
       for (const label of [A, B, C, D, E]) graph.addNode(label);
       
       graph.addEdge(A, B, 3);
@@ -220,6 +218,31 @@ describe("WeightedGraph", () => {
           expect(graph.shortestPath(A, E).toArray()).toEqual([A, B, E]);
         });
       }); 
+    });
+  });
+
+  describe("#hasCicle", () => {
+    const [A, B, C] = ["A", "B", "C"]
+
+    beforeEach(() => { for (const label of [A, B, C]) graph.addNode(label) });
+
+    describe("when graph doesn't have cycle", () => {
+      it("should return false", () => {
+        graph.addEdge(A, B, 1);
+        graph.addEdge(B, C, 1);
+
+        expect(graph.hasCycle()).toBeFalsy();
+      });
+    });
+
+    describe("when graph have cycle", () => {
+      it("should return true", () => {
+        graph.addEdge(A, B, 1);
+        graph.addEdge(B, C, 1);
+        graph.addEdge(A, C, 1);
+        
+        expect(graph.hasCycle()).toBeTruthy();
+      });
     });
   });
 

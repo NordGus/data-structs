@@ -43,8 +43,8 @@ class Node {
     return this.label;
   }
 
-  public edgesArray(): Edge[] {
-    return Array.from(this.edges.values());
+  public getEdges(): IterableIterator<Edge> {
+    return this.edges.values();
   }
 }
 
@@ -204,7 +204,7 @@ class WeightedGraph {
       const current = queue.dequeue();
       visited.add(current);
 
-      for (const edge of current.edgesArray()) {
+      for (const edge of current.getEdges()) {
         if (visited.has(edge.getTo())) continue;
         
         const newDistance = distances.get(current) + edge.getWeight();
@@ -238,7 +238,7 @@ class WeightedGraph {
       const current = queue.dequeue();
       visited.add(current);
 
-      for (const edge of current.edgesArray()) {
+      for (const edge of current.getEdges()) {
         if (visited.has(edge.getTo())) continue;
         
         const newDistance = distances.get(current) + edge.getWeight();
@@ -254,6 +254,16 @@ class WeightedGraph {
     return this.buildPath(toNode, previosNodes);
   }
 
+  public hasCycle(): boolean {
+    const visited = new Set<Node>();
+
+    for (const node of this.nodes.values())
+      if (!visited.has(node) && this._hasCycle(node, visited))
+        return true;
+
+    return false;
+  }
+
   public nodesArray(): string[] { 
     return Array.from(this.nodes.values()).map((node) => node.toString());
   }
@@ -261,8 +271,9 @@ class WeightedGraph {
   public edgesArray(label: string): string[] { 
     const node = this.nodes.get(label);
     if (!node) throw new IllegalArgumentError();
+    const edges = Array.from(node.getEdges())
 
-    return node.edgesArray().map((edge) => edge.toString());
+    return edges.map((edge) => edge.toString());
   }
 
   private buildPath(to: Node, previosNodes: Map<Node, Node>): LinkedList<string> {
@@ -280,6 +291,18 @@ class WeightedGraph {
     for (; !stack.isEmpty();) path.addLast(stack.pop().toString());
 
     return path;
+  }
+
+  private _hasCycle(node: Node, visited: Set<Node>, parent?: Node): boolean {
+    visited.add(node);
+    
+    for (const edge of node.getEdges()) {
+      if (edge.getTo() === parent) continue;
+      if (visited.has(edge.getTo()) || this._hasCycle(edge.getTo(), visited, node))
+        return true;
+    }
+
+    return false
   }
 }
 
