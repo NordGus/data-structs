@@ -39,4 +39,30 @@ describe("Implement Dijkstra's Algorithm on a weighted graph", () => {
       });
     }); 
   });
+
+  describe("#shortestPath", () => {
+    describe("when from node doesn't exist", () => {
+      it("should return an empty list", () => {
+        expect(graph.shortestPath("F", A)).toBeNull();
+      });
+    });
+
+    describe("when to node doesn't exist", () => {
+      it("should return an empty list", () => {
+        expect(graph.shortestPath(A, "F")).toBeNull();
+      });
+    });
+
+    describe("when both node doesn't exist", () => {
+      it("should return an empty list", () => {
+        expect(graph.shortestPath("F", "G")).toBeNull();
+      });
+    });
+
+    describe("when boths nodes exists", () => {
+      it("should return the shortest distance between the given nodes", () => {
+        expect(graph.shortestPath(A, E).toArray()).toEqual([A, B, E]);
+      });
+    }); 
+  });
 });

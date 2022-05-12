@@ -1,4 +1,6 @@
 import { IllegalArgumentError } from "../shared/Errors";
+import LinkedList from "../shared/SimpleLinkedList";
+import Stack from "../shared/SimpleStack";
 
 type Comparator<T> = (a: T, b: T) => boolean;
 
@@ -217,6 +219,41 @@ class WeightedGraph {
     return distances.get(toNode);
   }
 
+  public shortestPath(from: string, to: string): LinkedList<string> {
+    const fromNode = this.nodes.get(from);
+    const toNode = this.nodes.get(to);
+
+    if (!fromNode || !toNode) return null;
+
+    const visited = new Set<Node>();
+    const previosNodes = new Map<Node, Node>();
+    const distances = new Map<Node, number>();
+    for (const node of this.nodes.values()) distances.set(node, Infinity);
+    distances.set(fromNode, 0);
+
+    const queue = new PriorityQueue((a: number, b: number) => a < b);
+    queue.enqueue(fromNode, 0);
+
+    for (; !queue.isEmpty();) {
+      const current = queue.dequeue();
+      visited.add(current);
+
+      for (const edge of current.edgesArray()) {
+        if (visited.has(edge.getTo())) continue;
+        
+        const newDistance = distances.get(current) + edge.getWeight();
+        
+        if (newDistance < distances.get(edge.getTo())) {
+          distances.set(edge.getTo(), newDistance);
+          previosNodes.set(edge.getTo(), current);
+          queue.enqueue(edge.getTo(), newDistance);
+        }
+      }
+    }
+
+    return this.buildPath(toNode, previosNodes);
+  }
+
   public nodesArray(): string[] { 
     return Array.from(this.nodes.values()).map((node) => node.toString());
   }
@@ -226,6 +263,23 @@ class WeightedGraph {
     if (!node) throw new IllegalArgumentError();
 
     return node.edgesArray().map((edge) => edge.toString());
+  }
+
+  private buildPath(to: Node, previosNodes: Map<Node, Node>): LinkedList<string> {
+    const stack = new Stack<Node>();
+    const path = new LinkedList<string>();
+    let prev = previosNodes.get(to);
+    
+    stack.push(to);
+
+    for (; prev;) {
+      stack.push(prev);
+      prev = previosNodes.get(prev);
+    }
+    
+    for (; !stack.isEmpty();) path.addLast(stack.pop().toString());
+
+    return path;
   }
 }
 
