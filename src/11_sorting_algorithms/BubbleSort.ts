@@ -6,7 +6,7 @@ class BubbleSort {
         for (let i = 0; i < output.length; i++) {
             sorted = true
 
-            for (let j = 1; j < output.length; j++) {
+            for (let j = 1; j < output.length - i; j++) {
                 if (output[j] > output[j - 1]) continue;
                 
                 const temp = output[j];
