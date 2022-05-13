@@ -19,10 +19,10 @@ class BubbleSort {
         return output;
     }
 
-    private swap(array: number[], fromIndex: number, toIndex: number): void {
-        const temp = array[fromIndex];
-        array[fromIndex] = array[toIndex];
-        array[toIndex] = temp;
+    private swap(array: number[], from: number, to: number): void {
+        const temp = array[from];
+        array[from] = array[to];
+        array[to] = temp;
     }
 }
 
