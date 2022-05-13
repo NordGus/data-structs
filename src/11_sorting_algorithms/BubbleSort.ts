@@ -8,10 +8,8 @@ class BubbleSort {
 
             for (let j = 1; j < output.length - i; j++) {
                 if (output[j] > output[j - 1]) continue;
-                
-                const temp = output[j];
-                output[j] = output[j - 1];
-                output[j - 1] = temp;
+
+                this.swap(output, j, j - 1);
                 sorted = false
             }
 
@@ -19,6 +17,12 @@ class BubbleSort {
         }
 
         return output;
+    }
+
+    private swap(array: number[], fromIndex: number, toIndex: number): void {
+        const temp = array[fromIndex];
+        array[fromIndex] = array[toIndex];
+        array[toIndex] = temp;
     }
 }
 
