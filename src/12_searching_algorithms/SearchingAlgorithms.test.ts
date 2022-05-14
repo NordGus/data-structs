@@ -194,4 +194,58 @@ describe("Implement Searching Algorithms", () => {
       });
     });
   });
+
+  describe("Exponential Search algorithm", () => {
+    const array = [3, 5, 6, 9, 11, 18, 20, 21, 24, 30];
+
+    describe("Recursive Implementation", () => {
+      describe("when the given target is contained in the array", () => {
+        it("should return the index of the given element", () => {
+          expect(finder.jumpSearch(array, 11)).toBe(4);
+        });
+
+        describe("when given a single item array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch([4], 4)).toBe(0);
+          });
+        });
+
+        describe("when searching for the last item in the array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 30)).toBe(9);
+          });
+        });
+
+        describe("when searching for an item in first boundry iteration", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 5)).toBe(1);
+          });
+        });
+      });
+  
+      describe("when the given target isn't contained in the array", () => {
+        it("should return -1", () => {
+          expect(finder.jumpSearch(array, 42)).toBe(-1);
+        });
+
+        describe("when searching for an item in the first boundry iteration", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 4)).toBe(-1);
+          });
+        });
+
+        describe("when given a single item array", () => {
+          it("should return -1", () => {
+            expect(finder.jumpSearch([4], 42)).toBe(-1);
+          });
+        });
+      });
+  
+      describe("when given an empty array", () => {
+        it("should return -1", () => {
+          expect(finder.jumpSearch([], 42)).toBe(-1);
+        });
+      });
+    });
+  });
 });

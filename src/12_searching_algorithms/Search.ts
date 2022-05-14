@@ -76,6 +76,14 @@ class Search {
 
         return -1;
     }
+
+    public exponentialSearch(input: number[], target: number): number {
+        let boundry = 1;
+
+        while (boundry < input.length && input[boundry] < target) boundry += boundry;
+        
+        return this._binarySearchRec(input, Math.floor(boundry / 2), Math.min(boundry, input.length - 1), target);
+    }
 }
 
 export default Search;
