@@ -37,6 +37,28 @@ class Search {
 
         return -1
     }
+
+    public ternarySearch(input: number[], target: number): number {
+        return this._ternarySearch(input, 0, input.length - 1, target);
+    }
+
+    private _ternarySearch(array: number[], left: number, rigth: number, target: number): number {
+        if (rigth < left) return -1;
+
+        const partitionSize = Math.floor((rigth - left) / 3);
+        const middle1 = left + partitionSize;
+        const middle2 = rigth - partitionSize;
+        const mid1 = array[middle1];
+        const mid2 = array[middle2];
+
+        if (target === mid1) return middle1;
+        if (target === mid2) return middle2;
+        
+        if (target > mid2) return this._ternarySearch(array, middle2 + 1, rigth, target);
+        if (target < mid1) return this._ternarySearch(array, left, middle1 - 1, target);
+        
+        return this._ternarySearch(array, middle1 + 1, middle2 - 1, target);
+    }
 }
 
 export default Search;

@@ -50,4 +50,23 @@ describe("Implement Searching Algorithms", () => {
       });
     });
   });
+
+
+  describe("Ternary Search algorithm", () => {
+    const array = [3, 5, 6, 9, 11, 18, 20, 21, 24, 30];
+
+    describe("Recursive Implementation", () => {
+      describe("when the given target is contained in the array", () => {
+        it("should return the index of the given element", () => {
+          expect(finder.ternarySearch(array, 11)).toBe(4);
+        });
+      });
+  
+      describe("when the given target isn't contained in the array", () => {
+        it("should return the index of the given element", () => {
+          expect(finder.ternarySearch(array, Infinity)).toBe(-1);
+        });
+      });
+    });
+  });
 });
