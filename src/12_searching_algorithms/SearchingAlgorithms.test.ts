@@ -10,11 +10,23 @@ describe("Implement Searching Algorithms", () => {
       it("should return the index of the given element", () => {
         expect(finder.linearSearch(array, 4)).toBe(2);
       });
+
+      describe("when given a single item array", () => {
+        it("should return the index of the given element", () => {
+          expect(finder.linearSearch([4], 4)).toBe(0);
+        });
+      });
     });
 
     describe("when the given target isn't contained in the array", () => {
       it("should return -1", () => {
         expect(finder.linearSearch(array, 42)).toBe(-1);
+      });
+
+      describe("when given a single item array", () => {
+        it("should return -1", () => {
+          expect(finder.linearSearch([4], 42)).toBe(-1);
+        });
       });
     });
 
@@ -33,11 +45,23 @@ describe("Implement Searching Algorithms", () => {
         it("should return the index of the given element", () => {
           expect(finder.binarySearchRec(array, 3)).toBe(2);
         });
+
+        describe("when given a single item array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.binarySearchRec([4], 4)).toBe(0);
+          });
+        });
       });
   
       describe("when the given target isn't contained in the array", () => {
         it("should return -1", () => {
           expect(finder.binarySearchRec(array, 42)).toBe(-1);
+        });
+
+        describe("when given a single item array", () => {
+          it("should return -1", () => {
+            expect(finder.binarySearchRec([4], 42)).toBe(-1);
+          });
         });
       });
   
@@ -53,11 +77,23 @@ describe("Implement Searching Algorithms", () => {
         it("should return the index of the given element", () => {
           expect(finder.binarySearch(array, 3)).toBe(2);
         });
+
+        describe("when given a single item array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.binarySearch([4], 4)).toBe(0);
+          });
+        });
       });
   
       describe("when the given target isn't contained in the array", () => {
         it("should return -1", () => {
           expect(finder.binarySearch(array, 42)).toBe(-1);
+        });
+
+        describe("when given a single item array", () => {
+          it("should return -1", () => {
+            expect(finder.binarySearch([4], 42)).toBe(-1);
+          });
         });
       });
   
@@ -69,7 +105,6 @@ describe("Implement Searching Algorithms", () => {
     });
   });
 
-
   describe("Ternary Search algorithm", () => {
     const array = [3, 5, 6, 9, 11, 18, 20, 21, 24, 30];
 
@@ -78,11 +113,23 @@ describe("Implement Searching Algorithms", () => {
         it("should return the index of the given element", () => {
           expect(finder.ternarySearch(array, 11)).toBe(4);
         });
+
+        describe("when given a single item array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.ternarySearch([4], 4)).toBe(0);
+          });
+        });
       });
   
       describe("when the given target isn't contained in the array", () => {
         it("should return -1", () => {
           expect(finder.ternarySearch(array, 42)).toBe(-1);
+        });
+
+        describe("when given a single item array", () => {
+          it("should return -1", () => {
+            expect(finder.linearSearch([4], 42)).toBe(-1);
+          });
         });
       });
   
