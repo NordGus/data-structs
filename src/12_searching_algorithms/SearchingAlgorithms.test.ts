@@ -155,11 +155,29 @@ describe("Implement Searching Algorithms", () => {
             expect(finder.jumpSearch([4], 4)).toBe(0);
           });
         });
+
+        describe("when searching for the last item in the array", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 30)).toBe(9);
+          });
+        });
+
+        describe("when searching for an item in first block", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 5)).toBe(1);
+          });
+        });
       });
   
       describe("when the given target isn't contained in the array", () => {
         it("should return -1", () => {
           expect(finder.jumpSearch(array, 42)).toBe(-1);
+        });
+
+        describe("when searching for an item in the first block", () => {
+          it("should return the index of the given element", () => {
+            expect(finder.jumpSearch(array, 4)).toBe(-1);
+          });
         });
 
         describe("when given a single item array", () => {
