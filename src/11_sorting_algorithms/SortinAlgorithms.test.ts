@@ -6,7 +6,6 @@ import MergeSort from "./MergeSort";
 import QuickSort from "./QuickSort";
 import SelectionSort from "./SelectionSort";
 
-
 describe("Implement Sorting Algorithms", () => {
   describe("Bubble Sort algorithm", () => {
     const sorter = new BubbleSort;
