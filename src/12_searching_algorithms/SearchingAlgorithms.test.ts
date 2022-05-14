@@ -13,8 +13,14 @@ describe("Implement Searching Algorithms", () => {
     });
 
     describe("when the given target isn't contained in the array", () => {
-      it("should return the index of the given element", () => {
-        expect(finder.linearSearch(array, Infinity)).toBe(-1);
+      it("should return -1", () => {
+        expect(finder.linearSearch(array, 42)).toBe(-1);
+      });
+    });
+
+    describe("when given an empty array", () => {
+      it("should return -1", () => {
+        expect(finder.linearSearch([], 42)).toBe(-1);
       });
     });
   });
@@ -30,8 +36,14 @@ describe("Implement Searching Algorithms", () => {
       });
   
       describe("when the given target isn't contained in the array", () => {
-        it("should return the index of the given element", () => {
-          expect(finder.binarySearchRec(array, Infinity)).toBe(-1);
+        it("should return -1", () => {
+          expect(finder.binarySearchRec(array, 42)).toBe(-1);
+        });
+      });
+  
+      describe("when given an empty array", () => {
+        it("should return -1", () => {
+          expect(finder.binarySearchRec([], 42)).toBe(-1);
         });
       });
     });
@@ -44,8 +56,14 @@ describe("Implement Searching Algorithms", () => {
       });
   
       describe("when the given target isn't contained in the array", () => {
-        it("should return the index of the given element", () => {
-          expect(finder.binarySearch(array, Infinity)).toBe(-1);
+        it("should return -1", () => {
+          expect(finder.binarySearch(array, 42)).toBe(-1);
+        });
+      });
+  
+      describe("when given an empty array", () => {
+        it("should return -1", () => {
+          expect(finder.binarySearch([], 42)).toBe(-1);
         });
       });
     });
@@ -63,8 +81,14 @@ describe("Implement Searching Algorithms", () => {
       });
   
       describe("when the given target isn't contained in the array", () => {
-        it("should return the index of the given element", () => {
-          expect(finder.ternarySearch(array, Infinity)).toBe(-1);
+        it("should return -1", () => {
+          expect(finder.ternarySearch(array, 42)).toBe(-1);
+        });
+      });
+  
+      describe("when given an empty array", () => {
+        it("should return -1", () => {
+          expect(finder.ternarySearch([], 42)).toBe(-1);
         });
       });
     });
