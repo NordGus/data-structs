@@ -59,6 +59,25 @@ class Search {
         
         return this._ternarySearch(array, middle1 + 1, middle2 - 1, target);
     }
+
+    public jumpSearch(input: number[], target: number): number {
+        const blockSize = Math.floor(Math.sqrt(input.length));
+        let start = 0;
+        let next = blockSize;
+        
+        while (input[next - 1] < target) {
+            start = next
+            next += blockSize;
+
+            if (start > input.length) return -1;
+            if (next > input.length) next = input.length;
+            if (next >= input.length) break;
+        }
+
+        for (let i = start; i < next; i++) if (input[i] === target) return i;
+
+        return -1;
+    }
 }
 
 export default Search;
