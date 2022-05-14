@@ -65,13 +65,11 @@ class Search {
         let start = 0;
         let next = blockSize;
         
-        while (input[next - 1] < target) {
+        while (start < input.length && input[next - 1] < target) {
             start = next
             next += blockSize;
-
-            if (start > input.length) return -1;
+            
             if (next > input.length) next = input.length;
-            if (next >= input.length) break;
         }
 
         for (let i = start; i < next; i++) if (input[i] === target) return i;
